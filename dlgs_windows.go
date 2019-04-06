@@ -110,6 +110,10 @@ func openfile(flags uint32, b *FileBuilder) (d filedlg) {
 			s := fmt.Sprintf("*.%s;", ext)
 			d.filters = append(d.filters, utf16.Encode([]rune(s))...)
 		}
+		for _, fileName := range filt.FileNames {
+			s := fmt.Sprintf("%s;", fileName)
+			d.filters = append(d.filters, utf16.Encode([]rune(s))...)
+		}
 		d.filters = append(d.filters, 0)
 	}
 	if d.filters != nil {

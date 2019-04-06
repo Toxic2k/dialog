@@ -60,6 +60,7 @@ func (b *MsgBuilder) Error() {
 type FileFilter struct {
 	Desc       string
 	Extensions []string
+	FileNames []string
 }
 
 type FileBuilder struct {
@@ -85,9 +86,23 @@ By default all files can be selected.
 
 The special extension '*' allows all files to be selected when the Filter is active. */
 func (b *FileBuilder) Filter(desc string, extensions ...string) *FileBuilder {
-	filt := FileFilter{desc, extensions}
+	filt := FileFilter{desc, extensions, nil}
 	if len(filt.Extensions) == 0 {
 		filt.Extensions = append(filt.Extensions, "*")
+	}
+	b.Filters = append(b.Filters, filt)
+	return b
+}
+
+/* Filter adds a category of files to the types allowed by the dialog. Multiple
+calls to Filter are cumulative - any of the provided categories will be allowed.
+By default all files can be selected.
+
+The special extension '*' allows all files to be selected when the Filter is active. */
+func (b *FileBuilder) FilterNames(desc string, fileNames ...string) *FileBuilder {
+	filt := FileFilter{desc, nil,fileNames}
+	if len(filt.FileNames) == 0 {
+		filt.FileNames = append(filt.FileNames, "*")
 	}
 	b.Filters = append(b.Filters, filt)
 	return b
